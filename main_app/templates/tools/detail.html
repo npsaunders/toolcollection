@@ -7,5 +7,9 @@
     <span class="card-title">{{ tool.name }}</span>
     <p>Description: {{ tool.description }}</p>
   </div>
+   <div class="card-action">
+    <a href="{% url 'tools_update' tool.id %}">Edit</a>
+    <a href="{% url 'tools_delete' tool.id %}">Delete</a>
+  </div>
 </div>
 {% endblock%}
