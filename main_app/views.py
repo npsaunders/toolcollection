@@ -1,7 +1,7 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from .forms import MaintenanceForm
 from .models import Tool
 
 
@@ -18,7 +18,22 @@ def tools_index(request):
 
 def tools_detail(request, tool_id):
     tool = Tool.objects.get(id=tool_id)
-    return render(request, 'tools/detail.html', {"tool" : tool})
+    maintenance_form = MaintenanceForm()
+    return render(request, 'tools/detail.html', {
+        "tool" : tool,
+        'maintenance_form':maintenance_form
+        })
+
+def add_maintenance(request, tool_id):
+    form = MaintenanceForm(request.POST)
+    # validate the form
+    if form.is_valid():
+    # don't save the form to the db until it
+    # has the cat_id assigned
+        new_maintenance = form.save(commit=False)
+        new_maintenance.tool_id = tool_id
+        new_maintenance.save()
+    return redirect('detail', tool_id = tool_id)
 
 class ToolCreate(CreateView):
     model = Tool

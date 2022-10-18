@@ -2,14 +2,53 @@
 
 <h1>Tool List</h1>
 
-<div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ tool.name }}</span>
-    <p>Description: {{ tool.description }}</p>
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ tool.name }}</span>
+        <p>Description: {{ tool.description }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'tools_update' tool.id %}">Edit</a>
+        <a href="{% url 'tools_delete' tool.id %}">Delete</a>
+      </div>
+    </div>
   </div>
-   <div class="card-action">
-    <a href="{% url 'tools_update' tool.id %}">Edit</a>
-    <a href="{% url 'tools_delete' tool.id %}">Delete</a>
+  <div class="col s6">
+<form action="{% url 'add_maintenance' tool.id %}" method="POST">
+    {% csrf_token %} {{ maintenance_form.as_p }}
+    <input type="submit" class="btn" value="Add Maintenance" />
+  </form>
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Maintenance</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for maintenance in tool.maintenance_set.all %}
+        <tr>
+          <td>{{maintenance.date}}</td>
+          <td>{{maintenance.get_maintenance_display}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
-{% endblock%}
+<script>
+    var dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+  var selectEl = document.getElementById('id_maintenance');
+  M.FormSelect.init(selectEl);
+
+</script>
+
+{% endblock %}
