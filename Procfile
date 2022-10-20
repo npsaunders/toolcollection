@@ -1,1 +1,1 @@
-web: gunicorn toolcollector.wsgi
+web: gunicorn toolcollection.wsgi
