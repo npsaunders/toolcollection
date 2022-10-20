@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Storage Places List</h1>
+{% for storage in object_list %}
+<div class="card">
+    <a href="{% url 'storages_detail' storage.id %}">
+        <div class="card-content">
+            <span class="card-title">A {{ storage.name }}</span>
+        </div>
+    </a>
+</div>
+{% endfor %}
+
+
+{% endblock %}
